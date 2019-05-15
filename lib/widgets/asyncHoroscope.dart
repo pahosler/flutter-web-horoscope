@@ -113,8 +113,32 @@ class AsyncHoroscope extends StatelessWidget {
       child: FutureBuilder<Zodiac>(
         future: zodiac,
         builder: (context, snapShot) {
-          if (snapShot.hasData) {
-            return Container(
+          switch (snapShot.connectionState) {
+            case ConnectionState.none:
+              return Text(
+                "Select a Sign",
+                textAlign: TextAlign.center,
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+              );
+            case ConnectionState.active:
+            case ConnectionState.waiting:
+              return Container(
+                padding: EdgeInsets.all(20.0),
+                height: 20.0,
+                width: 20.0,
+                child: Center(
+                  child: CircularProgressIndicator(
+                    strokeWidth: 1.0,
+                  ),
+                ),
+              );
+            case ConnectionState.done:
+              if (snapShot.hasError) return Text(
+                "Select a Sign",
+                textAlign: TextAlign.center,
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+              );
+              return Container(
               width: double.infinity,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -141,29 +165,9 @@ class AsyncHoroscope extends StatelessWidget {
                 ],
               ),
             );
-          } else if (!snapShot.hasData) {
-            return Container(
-              padding: EdgeInsets.all(20.0),
-              height: 20.0,
-              width: 20.0,
-              child: Center(
-                child: CircularProgressIndicator(
-                  strokeWidth: 1.0,
-                ),
-              ),
-            );
-          } else if (snapShot.hasError) {
-            // print(snapShot.error);
-            return Container(
-              child: Text(
-                "Select a Sign",
-                textAlign: TextAlign.center,
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-              ),
-            );
           }
-          snapShot.data.zodiac = null;
-        },
+          return null;
+          }
       ),
     );
   }
