@@ -5,7 +5,8 @@ import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 
 Future<Zodiac> fetchPost(sign) async {
-  final response = await http.get('https://cyber-side.glitch.me/api/$sign');
+  final response = await http.get(
+      'https://horoscope-api.netlify.com/.netlify/functions/main/?sign=$sign');
   if (response.statusCode == 200) {
     // If the call to the server was successful, parse the JSON
     return Zodiac.fromJson(json.decode(response.body));
