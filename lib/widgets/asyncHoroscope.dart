@@ -141,14 +141,7 @@ class AsyncHoroscope extends StatelessWidget {
                 ],
               ),
             );
-          } else if (snapShot.hasError) {
-            print(snapShot.error);
-            return Text(
-              "Select a Sign",
-              textAlign: TextAlign.center,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-            );
-          } else {
+          } else if (!snapShot.hasData) {
             return Container(
               padding: EdgeInsets.all(20.0),
               height: 20.0,
@@ -159,7 +152,17 @@ class AsyncHoroscope extends StatelessWidget {
                 ),
               ),
             );
+          } else if (snapShot.hasError) {
+            // print(snapShot.error);
+            return Container(
+              child: Text(
+                "Select a Sign",
+                textAlign: TextAlign.center,
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+              ),
+            );
           }
+          snapShot.data.zodiac = null;
         },
       ),
     );
